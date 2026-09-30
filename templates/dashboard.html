@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faisalabadi Industrial IoT Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="logo">
+                <i class="fas fa-industry"></i>
+                <span>Faisalabadi IoT Platform</span>
+            </div>
+            <div class="header-controls">
+                <span class="live-indicator">
+                    <i class="fas fa-circle"></i> LIVE
+                </span>
+                <button onclick="refreshData()" class="refresh-btn">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Machine Selector -->
+        <div class="machine-selector">
+            <label for="machineSelect">Select Machine:</label>
+            <select id="machineSelect" onchange="loadMachine(this.value)">
+                <!-- Populated by JavaScript -->
+            </select>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Left Column: Summary Cards -->
+            <div class="summary-cards">
+                <div class="card total-machines">
+                    <div class="card-icon"><i class="fas fa-microchip"></i></div>
+                    <div class="card-content">
+                        <span class="card-label">Total Machines</span>
+                        <span class="card-value" id="totalMachines">0</span>
+                    </div>
+                </div>
+                <div class="card online-devices">
+                    <div class="card-icon"><i class="fas fa-wifi"></i></div>
+                    <div class="card-content">
+                        <span class="card-label">Online</span>
+                        <span class="card-value" id="onlineDevices">0</span>
+                    </div>
+                </div>
+                <div class="card warning-machines">
+                    <div class="card-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="card-content">
+                        <span class="card-label">Warning</span>
+                        <span class="card-value" id="warningMachines">0</span>
+                    </div>
+                </div>
+                <div class="card critical-machines">
+                    <div class="card-icon"><i class="fas fa-skull-crossbones"></i></div>
+                    <div class="card-content">
+                        <span class="card-label">Critical</span>
+                        <span class="card-value" id="criticalMachines">0</span>
+                    </div>
+                </div>
+                <div class="card avg-health">
+                    <div class="card-icon"><i class="fas fa-heartbeat"></i></div>
+                    <div class="card-content">
+                        <span class="card-label">Avg Health</span>
+                        <span class="card-value" id="avgHealth">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Machine Detail -->
+            <div class="machine-detail" id="machineDetail">
+                <!-- Machine Header -->
+                <div class="machine-header">
+                    <div>
+                        <h2 id="machineName">Textile Motor 01</h2>
+                        <span class="machine-id" id="machineId">ID: M-001</span>
+                        <span class="machine-factory" id="machineFactory">Faisalabad Textile Unit</span>
+                    </div>
+                    <div class="status-badge" id="statusBadge">
+                        <span class="status-normal">🟢 NORMAL</span>
+                    </div>
+                </div>
+
+                <!-- Health Score Gauge -->
+                <div class="health-section">
+                    <div class="gauge-container">
+                        <svg class="gauge-svg" viewBox="0 0 120 120">
+                            <circle class="gauge-bg" cx="60" cy="60" r="50"/>
+                            <circle class="gauge-progress" id="gaugeProgress" cx="60" cy="60" r="50"/>
+                            <text class="gauge-text" id="healthScore" x="60" y="65">94%</text>
+                        </svg>
+                    </div>
+                    <div class="health-label">Machine Health</div>
+                </div>
+
+                <!-- Sensors Grid -->
+                <div class="sensors-grid">
+                    <div class="sensor-card">
+                        <i class="fas fa-thermometer-half"></i>
+                        <div class="sensor-info">
+                            <span class="sensor-label">Temperature</span>
+                            <span class="sensor-value" id="tempValue">42.5°C</span>
+                            <span class="sensor-normal" id="tempNormal">Normal: 42°C</span>
+                        </div>
+                    </div>
+                    <div class="sensor-card">
+                        <i class="fas fa-wave-square"></i>
+                        <div class="sensor-info">
+                            <span class="sensor-label">Vibration</span>
+                            <span class="sensor-value" id="vibValue">2.1 mm/s</span>
+                            <span class="sensor-normal" id="vibNormal">Normal: 2.0 mm/s</span>
+                        </div>
+                    </div>
+                    <div class="sensor-card">
+                        <i class="fas fa-sync-alt"></i>
+                        <div class="sensor-info">
+                            <span class="sensor-label">RPM</span>
+                            <span class="sensor-value" id="rpmValue">1480 RPM</span>
+                            <span class="sensor-normal" id="rpmNormal">Normal: 1480 RPM</span>
+                        </div>
+                    </div>
+                    <div class="sensor-card">
+                        <i class="fas fa-bolt"></i>
+                        <div class="sensor-info">
+                            <span class="sensor-label">Current</span>
+                            <span class="sensor-value" id="currentValue">5.2 A</span>
+                            <span class="sensor-normal" id="currentNormal">Normal: 5.0 A</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Graph -->
+                <div class="graph-section">
+                    <div class="graph-header">
+                        <h3>Sensor History (24 Hours)</h3>
+                        <div class="graph-legend">
+                            <span><span class="legend-color temp-color"></span>Temp</span>
+                            <span><span class="legend-color vib-color"></span>Vib</span>
+                            <span><span class="legend-color rpm-color"></span>RPM</span>
+                            <span><span class="legend-color current-color"></span>Current</span>
+                        </div>
+                    </div>
+                    <canvas id="historyChart"></canvas>
+                </div>
+
+                <!-- Health Trend -->
+                <div class="graph-section">
+                    <div class="graph-header">
+                        <h3>Machine Health Trend (7 Days)</h3>
+                    </div>
+                    <canvas id="healthTrendChart" style="height: 150px;"></canvas>
+                </div>
+
+                <!-- Alerts & Maintenance -->
+                <div class="bottom-section">
+                    <div class="alerts-section">
+                        <h3><i class="fas fa-bell"></i> Recent Alerts</h3>
+                        <div class="alerts-list" id="alertsList">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="maintenance-section">
+                        <h3><i class="fas fa-tools"></i> Maintenance History</h3>
+                        <div class="maintenance-list" id="maintenanceList">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

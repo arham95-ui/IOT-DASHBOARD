@@ -1,0 +1,446 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #0a0e17;
+    color: #e0e6ed;
+    min-height: 100vh;
+}
+
+.dashboard-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #0d1b2a 0%, #1b2f44 100%);
+    border-radius: 16px;
+    border: 1px solid #1a3550;
+    margin-bottom: 24px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.logo i {
+    color: #00d4ff;
+    font-size: 28px;
+}
+
+.live-indicator {
+    background: #00ff88;
+    color: #0a0e17;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.live-indicator i {
+    font-size: 10px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.refresh-btn {
+    background: transparent;
+    border: none;
+    color: #7a9bb5;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.refresh-btn:hover {
+    background: #1a3550;
+    color: #00d4ff;
+    transform: rotate(180deg);
+}
+
+/* Machine Selector */
+.machine-selector {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 12px 20px;
+    background: #0d1b2a;
+    border-radius: 12px;
+    border: 1px solid #1a3550;
+}
+
+.machine-selector label {
+    font-weight: 600;
+    color: #7a9bb5;
+}
+
+.machine-selector select {
+    background: #1a3550;
+    color: #e0e6ed;
+    border: 1px solid #2a4a6a;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    min-width: 250px;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+}
+
+/* Summary Cards */
+.summary-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.card {
+    background: #0d1b2a;
+    border: 1px solid #1a3550;
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.3s;
+}
+
+.card:hover {
+    border-color: #2a5a7a;
+    transform: translateX(4px);
+}
+
+.card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-label {
+    font-size: 13px;
+    color: #7a9bb5;
+    font-weight: 400;
+}
+
+.card-value {
+    font-size: 24px;
+    font-weight: 700;
+    display: block;
+}
+
+/* Card Colors */
+.total-machines .card-icon { background: #1a3550; color: #00d4ff; }
+.online-devices .card-icon { background: #0a2a1a; color: #00ff88; }
+.warning-machines .card-icon { background: #3a2a0a; color: #ffaa00; }
+.critical-machines .card-icon { background: #3a0a0a; color: #ff4444; }
+.avg-health .card-icon { background: #1a1a3a; color: #aa66ff; }
+
+/* Machine Detail */
+.machine-detail {
+    background: #0d1b2a;
+    border: 1px solid #1a3550;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.machine-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.machine-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.machine-id {
+    display: block;
+    font-size: 14px;
+    color: #7a9bb5;
+}
+
+.machine-factory {
+    display: block;
+    font-size: 14px;
+    color: #4a7a9a;
+    margin-top: 4px;
+}
+
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.status-normal { color: #00ff88; }
+.status-attention { color: #ffaa00; }
+.status-warning { color: #ff8800; }
+.status-critical { color: #ff4444; }
+
+/* Health Gauge */
+.health-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.gauge-container {
+    width: 120px;
+    height: 120px;
+    position: relative;
+}
+
+.gauge-svg {
+    transform: rotate(-90deg);
+    width: 120px;
+    height: 120px;
+}
+
+.gauge-bg {
+    fill: none;
+    stroke: #1a3550;
+    stroke-width: 8;
+}
+
+.gauge-progress {
+    fill: none;
+    stroke: #00d4ff;
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 314.16;
+    stroke-dashoffset: 314.16;
+    transition: stroke-dashoffset 0.8s ease;
+}
+
+.gauge-text {
+    fill: #e0e6ed;
+    font-size: 24px;
+    font-weight: 700;
+    text-anchor: middle;
+    dominant-baseline: central;
+    transform: rotate(90deg) translate(0, -60px);
+}
+
+.health-label {
+    font-size: 14px;
+    color: #7a9bb5;
+    margin-top: 8px;
+}
+
+/* Sensors Grid */
+.sensors-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.sensor-card {
+    background: #0a141f;
+    border: 1px solid #1a3550;
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.sensor-card i {
+    font-size: 24px;
+    color: #00d4ff;
+    width: 40px;
+}
+
+.sensor-info {
+    flex: 1;
+}
+
+.sensor-label {
+    font-size: 12px;
+    color: #7a9bb5;
+    display: block;
+}
+
+.sensor-value {
+    font-size: 18px;
+    font-weight: 600;
+    display: block;
+}
+
+.sensor-normal {
+    font-size: 11px;
+    color: #4a7a9a;
+}
+
+/* Graph Section */
+.graph-section {
+    background: #0a141f;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.graph-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.graph-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.graph-legend {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: #7a9bb5;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 12px;
+    height: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.temp-color { background: #ff6b6b; }
+.vib-color { background: #ffa94d; }
+.rpm-color { background: #4dabf7; }
+.current-color { background: #69db7c; }
+
+#historyChart {
+    max-height: 220px;
+}
+
+#healthTrendChart {
+    max-height: 150px;
+}
+
+/* Bottom Section */
+.bottom-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+.alerts-section, .maintenance-section {
+    background: #0a141f;
+    border-radius: 12px;
+    padding: 16px 20px;
+}
+
+.alerts-section h3, .maintenance-section h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.alerts-section h3 i, .maintenance-section h3 i {
+    margin-right: 8px;
+    color: #7a9bb5;
+}
+
+.alert-item, .maintenance-item {
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border-left: 3px solid;
+    background: #0d1b2a;
+}
+
+.alert-item .alert-time {
+    font-size: 11px;
+    color: #4a7a9a;
+}
+
+.alert-item .alert-issue {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.alert-item .alert-action {
+    font-size: 12px;
+    color: #7a9bb5;
+}
+
+.alert-item.level-critical { border-color: #ff4444; }
+.alert-item.level-warning { border-color: #ffaa00; }
+.alert-item.level-info { border-color: #00d4ff; }
+
+.maintenance-item {
+    font-size: 13px;
+    color: #7a9bb5;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .summary-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+    }
+    
+    .bottom-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .sensors-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .machine-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
